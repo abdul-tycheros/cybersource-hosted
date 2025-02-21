@@ -24,7 +24,10 @@
         }
 
         function generateSignedDateTime() {
-            const timestamp = new Date().toISOString();
+            const date = new Date();
+            // Add 4 hours for Dubai timezone
+            date.setHours(date.getHours() + 4);
+            const timestamp = date.toISOString();
             document.getElementById('signed_date_time').value = timestamp;
         }
 
@@ -76,7 +79,7 @@
                 <input type="hidden" id="access_key" name="access_key" value="1196c8bbbc373f2a80e77460dd7e0b40">
                 <input type="hidden" id="profile_id" name="profile_id" value="6D7941B7-30D7-4A1C-AA6A-E36B7BB4FF2A">
                 <input type="hidden" id="transaction_uuid" name="transaction_uuid">
-                <input type="hidden" id="signed_date_time" name="signed_date_time">
+                <input type="text" id="signed_date_time" name="signed_date_time">
                 <input type="hidden" id="locale" name="locale" value="en">
                 <input type="hidden" id="transaction_type" name="transaction_type" value="authorization, create_payment_token">
                 <input type="hidden" id="reference_number" name="reference_number">
@@ -109,7 +112,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit Payment</button>
+            <button type="submit" class="btn btn-primary">>Checkout with HOP</button>
         </form>
     </div>
 </body>
