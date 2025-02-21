@@ -68,99 +68,69 @@
   <body>
     <div class="container mt-5">
       <h3>CyberSource Payment Form</h3>
-      <form
-        id="payment-form"
-        action="https://testsecureacceptance.cybersource.com/pay"
-        method="post"
-      >
-        <div class="row">
-          <!-- Secret Key (for demo only) -->
-          <div class="col-12 mb-3">
-            <label for="secret_key" class="form-label"
-              >Secret Key (Demo Only)</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="secret_key"
-              value="95b315beef4f4c8fac153acdaca4b95f49da4e0f77624bdb8c2a2c8e25111ac06917e4d4aba24484bd0d6a595ca35cbf050982fc2e9b4b09a5df4f37789b6f6f3d17a91a0dd64f528945dddbf53200fb16c00e5c758744918960f772aa05b7e05c64cf65e83c42f8a3df331079988eafcbf5b0df16d74b5d8fb8bd610027bf81"
-            />
-          </div>
-          <!-- Hidden Fields -->
-          <input
-            type="hidden"
-            id="access_key"
-            name="access_key"
-            value="1196c8bbbc373f2a80e77460dd7e0b40"
-          />
-          <input
-            type="hidden"
-            id="profile_id"
-            name="profile_id"
-            value="6D7941B7-30D7-4A1C-AA6A-E36B7BB4FF2A"
-          />
-          <input type="hidden" id="transaction_uuid" name="transaction_uuid" />
-          <input type="text" id="signed_date_time" name="signed_date_time" />
-          <input type="hidden" id="locale" name="locale" value="en" />
-          <input
-            type="hidden"
-            id="transaction_type"
-            name="transaction_type"
-            value="authorization, create_payment_token"
-          />
-          <input type="hidden" id="reference_number" name="reference_number" />
-          <input
-            type="hidden"
-            id="payment_method"
-            name="payment_method"
-            value="card"
-          />
-          <!-- Amount Details -->
-          <div class="col-6 mb-3">
-            <label for="amount" class="form-label">Amount</label>
-            <input
-              type="number"
-              class="form-control"
-              id="amount"
-              name="amount"
-              value="5"
-              required
-            />
-          </div>
-          <div class="col-6 mb-3">
-            <label for="currency" class="form-label">Currency</label>
-            <select class="form-select" id="currency" name="currency" required>
-              <option value="USD" selected>USD</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-            </select>
-          </div>
-          <!-- Signed Fields -->
-          <input
-            type="hidden"
-            id="signed_field_names"
-            name="signed_field_names"
-            value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method"
-          />
-          <input
-            type="hidden"
-            id="unsigned_field_names"
-            name="unsigned_field_names"
-            value=""
-          />
-          <!-- Signature -->
-          <div class="col-12 mb-3">
-            <label for="signature" class="form-label">Signature</label>
-            <input
-              type="text"
-              class="form-control"
-              id="signature"
-              name="signature"
-              readonly
-            />
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Checkout with HOP</button>
+      <form id="payment-form" action="https://testsecureacceptance.cybersource.com/pay" method="post">
+        <!-- Secret Key (Sandbox Only) -->
+        <label for="secret_key" class="form-label">Secret Key (Sandbox)</label>
+        <input
+          type="text"
+          class="form-control mb-3"
+          id="secret_key"
+          value="95b315beef4f4c8fac153acdaca4b95f49da4e0f77624bdb8c2a2c8e25111ac06917e4d4aba24484bd0d6a595ca35cbf050982fc2e9b4b09a5df4f37789b6f6f3d17a91a0dd64f528945dddbf53200fb16c00e5c758744918960f772aa05b7e05c64cf65e83c42f8a3df331079988eafcbf5b0df16d74b5d8fb8bd610027bf81"
+        />
+        <!-- Hidden Fields -->
+        <input type="hidden" id="access_key" name="access_key" value="1196c8bbbc373f2a80e77460dd7e0b40" />
+        <input type="hidden" id="profile_id" name="profile_id" value="6D7941B7-30D7-4A1C-AA6A-E36B7BB4FF2A" />
+        <input type="hidden" id="transaction_uuid" name="transaction_uuid" />
+        <input type="hidden" id="signed_date_time" name="signed_date_time" />
+        <input type="hidden" id="locale" name="locale" value="en" />
+        <input type="hidden" id="transaction_type" name="transaction_type" value="authorization, create_payment_token" />
+        <input type="hidden" id="reference_number" name="reference_number" />
+        <input type="hidden" id="payment_method" name="payment_method" value="card" />
+        <!-- Amount Details -->
+        <label for="amount" class="form-label">Amount</label>
+        <input
+          type="number"
+          class="form-control mb-3"
+          id="amount"
+          name="amount"
+          value="5"
+          required
+        />
+        <label for="currency" class="form-label">Currency</label>
+        <select class="form-select mb-3" id="currency" name="currency" required>
+          <option value="USD" selected>USD</option>
+          <option value="AED">AED</option>
+          <option value="QAR">QAR</option>
+        </select>
+        <!-- Signed Fields -->
+        <input
+          type="hidden"
+          id="signed_field_names"
+          name="signed_field_names"
+          value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method"
+        />
+        <input
+          type="hidden"
+          id="unsigned_field_names"
+          name="unsigned_field_names"
+          value=""
+        />
+        <!-- Signature -->
+        <label for="signature" class="form-label">Signature</label>
+        <input
+          type="text"
+          class="form-control mb-3"
+          id="signature"
+          name="signature"
+          readonly
+        />
+        <input 
+          type="submit"
+          id="submit"
+          name="submit"
+          value="Checkout with HOP"
+          style="padding: 10px 20px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;"
+        />
       </form>
     </div>
   </body>
