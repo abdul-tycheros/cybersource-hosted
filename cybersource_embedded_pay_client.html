@@ -45,7 +45,8 @@
       }
 
       async function generateSignature() {
-        const secretKey = "95b315beef4f4c8fac153acdaca4b95f49da4e0f77624bdb8c2a2c8e25111ac06917e4d4aba24484bd0d6a595ca35cbf050982fc2e9b4b09a5df4f37789b6f6f3d17a91a0dd64f528945dddbf53200fb16c00e5c758744918960f772aa05b7e05c64cf65e83c42f8a3df331079988eafcbf5b0df16d74b5d8fb8bd610027bf81";
+        const secretKey =
+          "95b315beef4f4c8fac153acdaca4b95f49da4e0f77624bdb8c2a2c8e25111ac06917e4d4aba24484bd0d6a595ca35cbf050982fc2e9b4b09a5df4f37789b6f6f3d17a91a0dd64f528945dddbf53200fb16c00e5c758744918960f772aa05b7e05c64cf65e83c42f8a3df331079988eafcbf5b0df16d74b5d8fb8bd610027bf81";
         const signedFieldNames =
           document.getElementById("signed_field_names").value;
 
@@ -62,23 +63,23 @@
         console.log("signatureString: ", signatureString);
 
         try {
-          // const response = await fetch(
-          //   "http://localhost:8080/generate-cybersource-pay-signature",
-          //   {
-          //     method: "POST",
-          //     headers: {
-          //       "Content-Type": "application/json",
-          //     },
-          //     body: JSON.stringify({ signatureString }),
-          //   }
-          // );
-          // const { signature } = await response.json();
+          const response = await fetch(
+            "http://localhost:8080/generate-cybersource-pay-signature",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ signatureString }),
+            }
+          );
+          const { signature } = await response.json();
           // Generate signature using HMAC SHA256 and encode as Base64
-          const signature = CryptoJS.HmacSHA256(
-            signatureString,
-            secretKey
-          ).toString(CryptoJS.enc.Base64);
-          console.log("signature: ===============: ",signature)
+          // const signature = CryptoJS.HmacSHA256(
+          //   signatureString,
+          //   secretKey
+          // ).toString(CryptoJS.enc.Base64);
+          // console.log("signature: ===============: ",signature)
           document.getElementById("signature").value = signature;
         } catch (error) {
           console.error("Error generating signature:", error);
@@ -122,18 +123,8 @@
           value="authorization,create_payment_token"
         />
         <input type="hidden" id="reference_number" name="reference_number" />
-        <input
-          type="hidden"
-          id="amount"
-          name="amount"
-          value="5.00"
-        />
-        <input
-          type="hidden"
-          id="currency"
-          name="currency"
-          value="USD"
-        />
+        <input type="hidden" id="amount" name="amount" value="5.00" />
+        <input type="hidden" id="currency" name="currency" value="USD" />
         <input
           type="hidden"
           id="signed_field_names"
@@ -146,11 +137,7 @@
           name="payment_method"
           value="card"
         />
-        <input
-          type="hidden"
-          id="signature"
-          name="signature"
-        />
+        <input type="hidden" id="signature" name="signature" />
         <input
           type="submit"
           id="submit"
