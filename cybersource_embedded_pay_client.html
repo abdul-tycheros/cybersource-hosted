@@ -78,6 +78,7 @@
             signatureString,
             secretKey
           ).toString(CryptoJS.enc.Base64);
+          console.log("signature: ===============: ",signature)
           document.getElementById("signature").value = signature;
         } catch (error) {
           console.error("Error generating signature:", error);
@@ -146,7 +147,7 @@
           value="card"
         />
         <input
-          type="text"
+          type="hidden"
           id="signature"
           name="signature"
         />
