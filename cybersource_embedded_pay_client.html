@@ -63,22 +63,22 @@
         console.log("signatureString: ", signatureString);
 
         try {
-          const response = await fetch(
-            "http://localhost:8080/generate-cybersource-pay-signature",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ signatureString }),
-            }
-          );
-          const { signature } = await response.json();
+          // const response = await fetch(
+          //   "http://localhost:8080/generate-cybersource-pay-signature",
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({ signatureString }),
+          //   }
+          // );
+          // const { signature } = await response.json();
           // Generate signature using HMAC SHA256 and encode as Base64
-          // const signature = CryptoJS.HmacSHA256(
-          //   signatureString,
-          //   secretKey
-          // ).toString(CryptoJS.enc.Base64);
+          const signature = CryptoJS.HmacSHA256(
+            signatureString,
+            secretKey
+          ).toString(CryptoJS.enc.Base64);
           // console.log("signature: ===============: ",signature)
           document.getElementById("signature").value = signature;
         } catch (error) {
