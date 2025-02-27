@@ -16,74 +16,55 @@
     </style>
   </head>
   <script>
+
+    const paymentData = {
+      access_key: "1196c8bbbc373f2a80e77460dd7e0b40",
+      profile_id: "6D7941B7-30D7-4A1C-AA6A-E36B7BB4FF2A",
+      transaction_uuid: crypto.randomUUID(),
+      signed_field_names:
+        "access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency",
+      unsigned_field_names: "",
+      signed_date_time: new Date().toISOString().split(".")[0] + "Z",
+      locale: "en",
+      transaction_type: "authorization",
+      reference_number: Array(20).fill(null).map(() => Math.floor(Math.random() * 10)).join(''),
+      amount: "100.00",
+      currency: "USD",
+    };
+
     $(function () {
-      generateTransactionUUID();
-      generateSignedDateTime();
-      generateReferenceNumber();
+      // Set values for all form inputs from paymentData
+      $("#access_key").val(paymentData.access_key);
+      $("#profile_id").val(paymentData.profile_id);
+      $("#transaction_uuid").val(paymentData.transaction_uuid);
+      $("#signed_field_names").val(paymentData.signed_field_names);
+      $("#unsigned_field_names").val(paymentData.unsigned_field_names);
+      $("#signed_date_time").val(paymentData.signed_date_time);
+      $("#locale").val(paymentData.locale);
+      $("#transaction_type").val(paymentData.transaction_type);
+      $("#reference_number").val(paymentData.reference_number);
+      $("#amount").val(paymentData.amount);
+      $("#currency").val(paymentData.currency);
+
       generateSignature();
-
-      function generateTransactionUUID() {
-        const uuid = crypto.randomUUID();
-        document.getElementById("transaction_uuid").value = uuid;
-      }
-
-      function generateSignedDateTime() {
-        const date = new Date();
-        date.setHours(date.getHours() + 4);
-        const timestamp = date.toISOString();
-        document.getElementById("signed_date_time").value = timestamp;
-      }
-
-      function generateReferenceNumber() {
-        const chars =
-          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let result = "";
-        for (let i = 0; i < 20; i++) {
-          result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        document.getElementById("reference_number").value = result;
-      }
 
       async function generateSignature() {
         const secretKey =
           "95b315beef4f4c8fac153acdaca4b95f49da4e0f77624bdb8c2a2c8e25111ac06917e4d4aba24484bd0d6a595ca35cbf050982fc2e9b4b09a5df4f37789b6f6f3d17a91a0dd64f528945dddbf53200fb16c00e5c758744918960f772aa05b7e05c64cf65e83c42f8a3df331079988eafcbf5b0df16d74b5d8fb8bd610027bf81";
-        const signedFieldNames =
-          document.getElementById("signed_field_names").value;
+        const signatureString = createSignatureString(paymentData);
+        console.log("signatureString: ", signatureString)
+        const signature = CryptoJS.HmacSHA256(signatureString, secretKey).toString(
+          CryptoJS.enc.Base64
+        );
+        $("#signature").val(signature);
+      }
 
-        const signedFields = {};
-        signedFieldNames.split(",").forEach((fieldName) => {
-          signedFields[fieldName] = document.getElementById(fieldName).value;
+      function createSignatureString(data) {
+        const signedFields = [];
+        data.signed_field_names.split(",").forEach((fieldName) => {
+          signedFields.push(`${fieldName}=${data[fieldName]}`);
         });
-
-        const signatureString = Object.keys(signedFields)
-          .sort()
-          .map((key) => `${key}=${signedFields[key]}`)
-          .join(",");
-
-        console.log("signatureString: ", signatureString);
-
-        try {
-          const response = await fetch(
-            "http://localhost:8080/generate-cybersource-pay-signature",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ signatureString }),
-            }
-          );
-          const { signature } = await response.json();
-          // Generate signature using HMAC SHA256 and encode as Base64
-          // const signature = CryptoJS.HmacSHA256(
-          //   signatureString,
-          //   secretKey
-          // ).toString(CryptoJS.enc.Base64);
-          // console.log("signature: ===============: ",signature)
-          document.getElementById("signature").value = signature;
-        } catch (error) {
-          console.error("Error generating signature:", error);
-        }
+        return signedFields.join(",");
       }
     });
   </script>
@@ -110,6 +91,12 @@
         <input type="hidden" id="transaction_uuid" name="transaction_uuid" />
         <input
           type="hidden"
+          id="signed_field_names"
+          name="signed_field_names"
+          value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency"
+        />
+        <input
+          type="hidden"
           id="unsigned_field_names"
           name="unsigned_field_names"
           value=""
@@ -120,24 +107,35 @@
           type="hidden"
           id="transaction_type"
           name="transaction_type"
-          value="authorization,create_payment_token"
-        />
-        <input type="hidden" id="reference_number" name="reference_number" />
-        <input type="hidden" id="amount" name="amount" value="5.00" />
-        <input type="hidden" id="currency" name="currency" value="USD" />
-        <input
-          type="hidden"
-          id="signed_field_names"
-          name="signed_field_names"
-          value="access_key,profile_id,transaction_uuid,signed_field_names,unsigned_field_names,signed_date_time,locale,transaction_type,reference_number,amount,currency,payment_method"
+          value="authorization"
+          size="25"
         />
         <input
           type="hidden"
-          id="payment_method"
-          name="payment_method"
-          value="card"
+          id="reference_number"
+          name="reference_number"
+          size="25"
         />
-        <input type="hidden" id="signature" name="signature" />
+        <input
+          type="hidden"
+          id="amount"
+          name="amount"
+          value="100.00"
+          size="25"
+        />
+        <input
+          type="hidden"
+          id="currency"
+          name="currency"
+          value="USD"
+          size="25"
+        />
+
+        <input
+          type="hidden"
+          id="signature"
+          name="signature"
+        />
         <input
           type="submit"
           value="Checkout with HOP"
